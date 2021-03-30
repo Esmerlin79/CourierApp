@@ -3,6 +3,7 @@ import Loading from '../Loading';
 import {LoginUser} from '../../actions/CourierAction';
 import { withRouter } from 'react-router-dom';
 import { useStateValue } from '../../context/store';
+import Error from '../Error';
 
 const Login = ({ history }) => {
 
@@ -13,6 +14,9 @@ const Login = ({ history }) => {
          password:''
     });
     const [ charging, setCharging ] = useState(false);
+    const [ messageError, setMessageError ] = useState(null)
+    const [ fails, setFails ] = useState(1);
+    const [ showButton, setShowButton ] = useState(false)
 
     const { username, password} = user;
 
@@ -23,14 +27,32 @@ const Login = ({ history }) => {
         })
     }
 
+    
     const handleSubmit = e =>{
-        e.preventDefault();
-        setCharging(true)
+        e.preventDefault();  
 
+        setCharging(true)
+        if(username.length >= 10 ){
+            setCharging(false)
+            setMessageError("El nombre de usuario debe ser menor a 10 caracteres")
+            return;
+        }
+        if(fails === 3){
+            setMessageError("Fallo 3 veces")
+            setShowButton(true);
+            setCharging(false)
+            return;
+        }        
+        setMessageError(null)
         LoginUser(user, dispatch).then(response =>{
             console.log(response);
+
             if(response.data.success){
+                setFails(0);
                 history.push("/Dashboard");
+            }else{
+                setFails(fails + 1);
+                setMessageError(response.data.exception)
             }
             setCharging(false)
         });
@@ -50,6 +72,7 @@ const Login = ({ history }) => {
                             <div className="card fat">
                                 <div className="card-body">
                                     <h4 className="card-title">Login</h4>
+                                    {messageError ? <Error message={messageError}/> : null}
                                     <form 
                                         className="my-login-validation" 
                                         onSubmit={handleSubmit}>
@@ -61,7 +84,9 @@ const Login = ({ history }) => {
                                                 className="form-control" 
                                                 name="username" 
                                                 value={username}
-                                                onChange={handleChange}/>
+                                                onChange={handleChange} 
+                                                pattern="[a-z]{1,15}"
+                                                />
                                         </div>
                                         <div className="form-group">
                                             <label>Password</label>
@@ -70,18 +95,22 @@ const Login = ({ history }) => {
                                                 className="form-control" 
                                                 name="password" 
                                                 value={password}
-                                                onChange={handleChange}/>
+                                                onChange={handleChange}
+                                                pattern="[a-z]{1,15}"/>
                                         </div>
 
                                         <div className="form-group m-0">
-
-                                            {charging === true
-                                            ? <Loading />
-                                            : (
-                                                <button className="btn btn-primary btn-block"> 
-                                                Login
-                                                </button>
-                                            )}   
+                                        
+                                            {showButton  ? null : (
+                                                charging === true
+                                                    ? <Loading />
+                                                    : (
+                                                        <button className="btn btn-primary btn-block"> 
+                                                        Login
+                                                        </button>
+                                                    )
+                                            )}
+                                               
                                         </div>
 
                                     </form>

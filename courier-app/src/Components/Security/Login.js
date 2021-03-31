@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loading from '../Loading';
 import {LoginUser} from '../../actions/CourierAction';
 import { withRouter } from 'react-router-dom';
@@ -15,7 +15,7 @@ const Login = ({ history }) => {
     });
     const [ charging, setCharging ] = useState(false);
     const [ messageError, setMessageError ] = useState(null)
-    const [ fails, setFails ] = useState(1);
+    const [ fails, setFails ] = useState(0);
     const [ showButton, setShowButton ] = useState(false)
 
     const { username, password} = user;
@@ -27,7 +27,13 @@ const Login = ({ history }) => {
         })
     }
 
-    
+    useEffect(() =>{
+        if(fails >= 3){
+            setMessageError("Fallo 3 veces no pude hacer login")
+            setShowButton(true);
+            setCharging(false)
+        }
+    }, [fails])
     const handleSubmit = e =>{
         e.preventDefault();  
 
@@ -37,25 +43,22 @@ const Login = ({ history }) => {
             setMessageError("El nombre de usuario debe ser menor a 10 caracteres")
             return;
         }
-        if(fails === 3){
-            setMessageError("Fallo 3 veces no pude hacer login")
-            setShowButton(true);
-            setCharging(false)
-            return;
-        }        
         setMessageError(null)
-        LoginUser(user, dispatch).then(response =>{
-            console.log(response);
 
-            if(response.data.success){
-                setFails(0);
-                history.push("/Dashboard");
-            }else{
-                setFails(fails + 1);
-                setMessageError(response.data.exception)
-            }
-            setCharging(false)
-        });
+        setTimeout(() =>{
+            LoginUser(user, dispatch).then(response =>{
+                console.log(response);
+    
+                if(response.data.success){
+                    setFails(0);
+                    history.push("/Dashboard");
+                }else{
+                    setFails(fails + 1);
+                    setMessageError(response.data.exception)
+                }
+                setCharging(false)
+            });
+        }, 2000);
         
     }
     

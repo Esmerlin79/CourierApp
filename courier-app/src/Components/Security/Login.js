@@ -13,6 +13,7 @@ const Login = ({ history }) => {
          username:'',
          password:''
     });
+
     const [ charging, setCharging ] = useState(false);
     const [ messageError, setMessageError ] = useState(null)
     const [ fails, setFails ] = useState(0);
@@ -32,15 +33,17 @@ const Login = ({ history }) => {
             setMessageError("Fallo 3 veces no pude hacer login")
             setShowButton(true);
             setCharging(false)
-        }
+        }   
+
     }, [fails])
+
     const handleSubmit = e =>{
         e.preventDefault();  
 
         setCharging(true)
-        if(username.length >= 10 ){
+        if(username.length > 10 ){
             setCharging(false)
-            setMessageError("El nombre de usuario debe ser menor a 10 caracteres")
+            setMessageError("Logitud maxima para nombre de usuario es de 10 caracteres")
             return;
         }
         setMessageError(null)
@@ -59,6 +62,10 @@ const Login = ({ history }) => {
                 setCharging(false)
             });
         }, 2000);
+
+        // fetch('https://courierdemo.azurewebsites.net/api/packages/getPending?username=jsanchez').then(response =>{
+        //     return  response.json();
+        // }).then(data => console.log(data));
         
     }
     

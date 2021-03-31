@@ -20,6 +20,7 @@ const Packages = () => {
             }
             setAllPackage(arr)           
         });
+        
         // axios.get('/packages/getPending?username=jsanchez').then(response => {
             //     console.log(response)
             // })

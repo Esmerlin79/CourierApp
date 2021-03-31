@@ -26,8 +26,8 @@ const Packages = () => {
       }, [])
     return ( 
         <div className="container">
-            <div class="row justify-content-center align-items-center minh-100">
-                <div class="col-lg-12">
+            <div className="row justify-content-center align-items-center minh-100">
+                <div className="col-lg-12">
                 {allpackage ? (
                         <MaterialTable 
                         title="Package Details"

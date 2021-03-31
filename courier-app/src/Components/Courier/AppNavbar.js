@@ -20,18 +20,14 @@ const AppNavbar = ({ history }) => {
             <div className="wrapper">
 
                 <nav id="sidebar">
-                    
                     <div className="sidebar-header">
                         <h3>App Courier</h3>
                     </div>
-
                     <ul className="list-unstyled components">
                         <p>Main Menu</p>
-
                         <li>
                             <a href="#">Paquetes Recibidos</a>
                         </li>
-
                         <li>
                             <a href="#" onClick={salirSesionApp}>Salir</a>
                         </li>
@@ -47,7 +43,7 @@ const AppNavbar = ({ history }) => {
                             </button>   
                         </div>
                     </nav> <br /><br />
-                    <div class="overlay"> </div>
+                    <div className="overlay"> </div>
                     <Packages />
                 </div>
 

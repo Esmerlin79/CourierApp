@@ -38,7 +38,7 @@ const Login = ({ history }) => {
             return;
         }
         if(fails === 3){
-            setMessageError("Fallo 3 veces")
+            setMessageError("Fallo 3 veces no pude hacer login")
             setShowButton(true);
             setCharging(false)
             return;
@@ -85,7 +85,8 @@ const Login = ({ history }) => {
                                                 name="username" 
                                                 value={username}
                                                 onChange={handleChange} 
-                                                pattern="[a-z]{1,15}"
+                                                pattern="[A-Za-z0-9]+"
+                                                title="No se permite caracteres especiales"
                                                 />
                                         </div>
                                         <div className="form-group">
@@ -96,7 +97,9 @@ const Login = ({ history }) => {
                                                 name="password" 
                                                 value={password}
                                                 onChange={handleChange}
-                                                pattern="[a-z]{1,15}"/>
+                                                title="No se permite caracteres especiales"
+                                                pattern="[A-Za-z0-9]+"
+                                                />
                                         </div>
 
                                         <div className="form-group m-0">
